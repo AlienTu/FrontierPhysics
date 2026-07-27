@@ -1,0 +1,50 @@
+name: website
+
+# Scoped to the website so unrelated task and doc changes do not pay for a
+# Node build. Deployment is handled by the host's own Git integration; this
+# workflow only proves the committed tree builds.
+on:
+  pull_request:
+    paths:
+      - "website/**"
+      - "tasks/**/task.md"
+      - ".github/workflows/website.yml"
+  push:
+    branches: [main]
+    paths:
+      - "website/**"
+      - "tasks/**/task.md"
+      - ".github/workflows/website.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      # Full checkout, not sparse: the task cards are generated from
+      # ../tasks/*/task.md at build time.
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - name: Install from the lockfile
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
+      - name: Confirm the task cards were generated
+        # A silent regression here would ship an empty task list rather than
+        # failing the build, so assert the real task ids made it into the HTML.
+        run: |
+          for task in $(ls ../tasks); do
+            if ! grep -rq "$task" .next/server/app/index.html; then
+              echo "::error::task '$task' is missing from the rendered page"
+              exit 1
+            fi
+          done
+          echo "All $(ls ../tasks | wc -l | tr -d ' ') task cards rendered."

@@ -11,9 +11,8 @@ export const metadata: Metadata = {
     template: `%s | ${site.name}`,
   },
   description: site.description,
-  icons: {
-    icon: "/favicon.svg",
-  },
+  // The favicon comes from src/app/icon.svg. File-based metadata is resolved
+  // through basePath; a hardcoded "/favicon.svg" would not be.
   openGraph: {
     title: `${site.name} — ${site.tagline}`,
     description: site.description,

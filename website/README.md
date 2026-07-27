@@ -1,53 +1,66 @@
 # FrontierPhysics website
 
-A static marketing + onboarding site for FrontierPhysics, aimed at practising physicists
-who may never have used an AI agent. It lives in this repository so the site and the
-benchmark it describes stay in sync.
-
-No build step, no framework, no dependencies. Plain HTML, one CSS file, one JS file.
-
-## Pages
-
-| File | Purpose |
-|---|---|
-| `index.html` | Landing page: plain-language glossary, paired-evaluation explainer, why contribute, task anatomy, example tasks, SkillsBench paper, FAQ |
-| `contribute.html` | The hands-on task-authoring guide — eight steps, with an explicit "what to delegate to AI / what never to delegate" boundary |
-| `tasks.html` | Task registry with per-task detail, the wanted-subfields list, and the metadata taxonomy |
-| `assets/css/style.css` | All styles (design tokens at the top) |
-| `assets/js/main.js` | Mobile nav, copy buttons, scroll reveal, TOC scroll-spy |
-| `assets/paper/skillsbench.pdf` | The SkillsBench paper, linked from the landing page |
+The public site for [FrontierPhysics](https://github.com/benchflow-ai/FrontierPhysics),
+built with Next.js and Tailwind. The design follows the
+[SkillsBench site](https://github.com/benchflow-ai/skillsbench/tree/main/website):
+same tokens, navbar, and animated canvas hero — with the drifting lattice made
+of atoms rather than grid squares — cut down to the two pages this benchmark
+needs while it is still work in progress.
 
 ## Run locally
 
 ```bash
 cd website
-python3 -m http.server 8000
-# open http://localhost:8000
+npm install
+npm run dev
+# open http://localhost:3000
 ```
 
-## Deploy
+`npm run build` produces the production build; `npm start` serves it.
 
-Any static host works — there is nothing to build, so the deploy is a file copy.
+## Pages
 
-For Netlify / Vercel / Cloudflare Pages: point the project at this repository, leave
-the build command empty, and set the publish directory to `website`.
+| Route | Purpose |
+|---|---|
+| `/` | Hero, how the paired evaluation works, task anatomy, live task list, contribution CTA |
+| `/contribute` | What makes a good task, the four steps, the AI-delegation boundary, pre-PR checks |
 
-For GitHub Pages: the branch-based source only serves `/` or `/docs`, so publishing
-from `website/` needs a workflow that uploads this directory as the Pages artifact
-(`actions/upload-pages-artifact` with `path: website`). No such workflow is wired up
-yet.
+## Layout
+
+```text
+src/
+  app/
+    layout.tsx        # navbar + footer + theme provider
+    page.tsx          # landing page
+    contribute/       # contributor guide
+    globals.css       # design tokens
+  components/
+    Navbar.tsx        # floating pill nav with theme switcher
+    Footer.tsx
+    HeroBackground.tsx # animated atom field + vignette behind the hero
+    Atoms.tsx         # canvas atom lattice, drifting diagonally
+    ui/button.tsx
+  lib/
+    site.ts           # every external link the site points at
+    tasks.ts          # reads ../tasks/*/task.md at build time
+```
 
 ## Editing notes
 
-- **Colours, spacing, radii** are CSS custom properties in the `:root` block at the top of
-  `style.css`. Change `--accent` to restyle the whole site.
-- **The header and footer are duplicated** in each HTML file (deliberate — it keeps the site
-  buildless). If you change one, change all three.
-- **Task cards** on `index.html` and `tasks.html` are hand-written from the `task.md` front matter
-  in [`../tasks/`](../tasks). When a task is added, add a card in both places and update the counts in the
-  hero stat strip and the two "four tasks" mentions.
-- **Numbers cited from the paper**: 87 tasks / 8 domains, 33.9% → 50.5% (+16.6 pp) across 18
-  model–harness configurations, +28.8 pp in natural science, 142 contributors. Keep these in sync
-  with the current version of `skillsbench.pdf`.
-- **Accessibility**: skip link, focus-visible outlines, `prefers-reduced-motion` respected,
-  colour contrast checked against WCAG AA for body text.
+- **Colours and radii** are CSS custom properties in `globals.css`. Both light
+  and dark are defined; the navbar switcher writes `class="dark"` on `<html>`.
+- **Task cards are generated**, not hand-written. `lib/tasks.ts` reads
+  `../tasks/*/task.md` frontmatter at build time, so the list cannot drift out
+  of sync with the repository the way a hand-maintained list would.
+- **All outbound links live in `lib/site.ts`.** Change them in one place.
+- **No benchmark results are published yet.** There is deliberately no
+  leaderboard and no performance claim anywhere on the site — add those only
+  when the task set is large enough to support them.
+
+## Deploy
+
+For Netlify / Vercel / Cloudflare Pages: point the project at this repository,
+set the base directory to `website`, and use the default Next.js build.
+
+Note that the build reads `../tasks/`, so the deploy needs the whole repository
+checked out, not just this directory.

@@ -6,9 +6,22 @@ To achieve this, we need contributors from the broad Physics community to add di
 **Links**: 
 
 # Authorship policy
-Contributors who merge **1 high-quality task** earn co-authorship consideration
-on the FrontierPhysics paper and dataset. Quality beats quantity: one excellent task
-is worth more than many mediocre ones.
+Contribution credit is tracked in points, and **12 points earns co-authorship**
+on the FrontierPhysics paper and dataset.
+
+| Contribution | Points |
+|---|---:|
+| A task you authored is merged | 4 |
+| A task you reviewed is merged | 1 |
+
+Points accumulate across both kinds of work, so three merged tasks reaches 12,
+and so does any mix that adds up — two merged tasks plus four reviews, for
+example.
+
+Points are awarded on merge, not on submission: a review earns its point only
+once the task it reviewed is merged. Quality beats quantity — one excellent task
+is worth more than many mediocre ones, and a submission that does not clear the
+bar in [What makes a good task](#what-makes-a-good-task) earns nothing.
 
 # What makes a good task
 A good task must satisfy three requirements:

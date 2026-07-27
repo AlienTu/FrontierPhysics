@@ -1,0 +1,32 @@
+# The repository root .gitignore excludes `lib/` — a Python packaging
+# convention — which would otherwise silently swallow this app's source
+# directory of the same name. Re-include it.
+!src/lib/
+
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+.pnpm-debug.log*
+
+# env files
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts

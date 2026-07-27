@@ -44,3 +44,14 @@ instructions, formatting, or verifier behavior.
 
 Include oracle output, verifier logs, trajectories, and any visual or binary
 artifacts needed for human review.
+
+## Credit
+
+Merging awards 4 points to the task author and 1 point to each reviewer who
+signed off; 12 points earns co-authorship on the FrontierPhysics paper and
+dataset. See the [authorship policy](https://github.com/benchflow-ai/FrontierPhysics/blob/main/CONTRIBUTING.md#authorship-policy).
+
+| Role | GitHub handle(s) |
+|---|---|
+| Author | |
+| Reviewers | |

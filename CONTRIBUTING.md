@@ -23,22 +23,30 @@ once the task it reviewed is merged. Quality beats quantity — one excellent ta
 is worth more than many mediocre ones, and a submission that does not clear the
 bar in [What makes a good task](#what-makes-a-good-task) earns nothing.
 
-# What makes a good task
-A good task must satisfy three requirements:
-1. Representative
-It must come from workflows used in real Physics research. 
+# Who should contribute
+A PhD or current PhD candidate in physics, EECS, or an adjacent field — or
+someone with extensive hands-on experience in a physics lab or an equivalent
+industry role.
 
-2. Complex
-Require substantial domain expertise and effort. An agent without mentoring skills have to use at least 80 tool calls and over 100 steps, and is very likely to fail the task.
+# What makes an ideal task
+Three things:
 
-3. Verifiable
-The task should have deliverables that can be deterministically graded. 
+1. **Your own work.** Real research you personally carried out, not a problem
+   invented for the benchmark.
+2. **Two weeks or more.** It took you at least two weeks of genuine effort,
+   with or without an LLM agent helping.
+3. **Verifiable.** The result is right or wrong, and a script can tell which.
+
+A task that misses any one of these will not merge.
 
 # How to contribute
-1. **Ideate**: Pick a domain where you have real expertise and choose a project you have done before that satisfy the above three requirements for a good task.
-2. **Create**: Implement a task package. You can refer to .. for examples of a good task, and you can refer to the `Task Package` section below for the strcture of a task.
-3. **Test**: Run the oracle and at least one agent with and without skills.
-4. **Submit**: Open a PR using the required checklist below.
+1. **Ideate**: Pick a project that meets all three. Bring it to group chat or
+   confirm with a maintainer before you build.
+2. **Create**: Implement the task package. See `Task Package` below.
+3. **Test**: Run the oracle, then run at least one agent with and without
+   skills.
+4. **Submit**: Fork this repository and open a PR against `main` here. See
+   [PR Requirements](#pr-requirements).
 
 # Task Package
 Technically, a task consists of:
@@ -120,17 +128,63 @@ Reviewers look for:
 - **Verification**: deterministic, outcome-based, anti-cheat aware.
 - **Instructions**: concise, fair, no skill hints.
 - **Environment**: reproducible Docker image, pinned deps, no leaked skills.
-- **Complexity**: 
-the agents use over 100 steps + over 80 tool calls to solve the task + have a high chance of failing agents without skills.
+- **Complexity**: took the author two weeks or more, and agents without skills
+  are likely to fail it.
 
-# PR Requirements
+# The final submission
 
-Before opening a PR:
+Every task submission consists of three things.
+
+## 1. A PR from your fork
+
+Fork this repository, push your task to a branch on your fork, and open a pull
+request against `main` here. One task per PR, and the PR should touch only
+files under `tasks/<task-id>/`.
+
+## 2. A detailed PR description
+
+The description is part of the submission, not a formality — it is the evidence
+a reviewer uses to judge provenance and difficulty. Explain the history of the
+task: where this work came from and what it cost you.
+
+| Field | Example |
+|---|---|
+| What the original work was | the analysis, measurement, or simulation, and why you were doing it |
+| Start date | 2025-03-04 |
+| End date | 2025-03-28 |
+| Working hours spent | approximately 60 hours over three weeks |
+| Whether an LLM agent helped | and if so, on which parts |
+
+Give real dates and an honest hour count. A task that took you two days is not
+a fit, and saying so early saves everyone a review cycle.
+
+Also cover the scientific motivation: what physics the task exercises, who does
+this kind of work, and where the data or model came from — with citations and
+license provenance for anything you did not produce yourself.
+
+## 3. A local test results report
+
+Before you open the PR, confirm all of these locally:
 
 1. `bench tasks check tasks/<task-id>` passes.
 2. `bench eval run --tasks-dir tasks/<task-id> --agent oracle --sandbox docker`
    passes with reward 1.0.
-3. At least one agent has been tested with and without skills.
-4. The PR description includes pass rates, failure analysis, and artifacts for
-   multimodal outputs.
-5. The task prompt, oracle, skills, tests, and metadata are ready for human review.
+3. At least one agent has been run both with and without skills.
+4. The task prompt, oracle, skills, tests, and metadata are ready for human
+   review.
+
+Then report what you actually ran:
+
+- oracle result, showing reward 1.0;
+- a table of agent runs — agent, model, with-skill and no-skill pass rates over
+  multiple trials, not a single run;
+- failure analysis: whether failures came from scientific reasoning,
+  environment or tooling, instructions, formatting, or verifier behaviour;
+- artifacts for any multimodal or binary outputs;
+- anything you discovered while building it that a reviewer or future
+  contributor should know — a leaky environment, a brittle tolerance, a metric
+  that turned out uninformative.
+
+Report the runs you completed. If you ran out of credits partway through a
+trial set, say so and report what finished; partial evidence honestly labelled
+is worth more than a padded table.

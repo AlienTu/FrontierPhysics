@@ -3,6 +3,20 @@
 What advanced physics workflow does this task represent, and who performs this
 work?
 
+## Task history
+
+This task must come from research you personally carried out, and which took
+you two weeks or more. Give real dates and an honest hour count.
+
+| Field | Value |
+|---|---|
+| What the original work was | |
+| Start date | YYYY-MM-DD |
+| End date | YYYY-MM-DD |
+| Working hours spent | |
+| Did an LLM agent help, and where? | |
+| Your background | PhD / PhD candidate / lab or industry experience |
+
 ## Task
 
 | Field | Value |
@@ -28,8 +42,13 @@ work?
 - [ ] No-skill and with-skill runs use the same task commit and model settings
 - [ ] At least one strong agent passes the with-skill solvability control
 - [ ] Trajectories and output artifacts were inspected
+- [ ] The task comes from my own research and took two weeks or more
+- [ ] This PR is from a fork and touches only `tasks/<task-id>/`
 
-## Results
+## Local test results
+
+Report multiple trials per condition, not a single run. If a trial set was cut
+short, say so and report what finished.
 
 | Agent | Model | Reasoning | No skill (primary) | With skills (control) | Time |
 |---|---|---|---:|---:|---:|
@@ -39,6 +58,11 @@ work?
 
 Explain whether failures came from scientific reasoning, environment/tooling,
 instructions, formatting, or verifier behavior.
+
+## What you learned building it
+
+Anything a reviewer or future contributor should know — a leaky environment, a
+brittle tolerance, a metric that turned out uninformative.
 
 ## Artifacts
 

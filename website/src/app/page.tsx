@@ -97,15 +97,13 @@ export default function Home() {
                   What a task looks like
                 </h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  A task is a native BenchFlow <code className="font-mono text-sm">task.md</code>{" "}
-                  package. The prompt describes an outcome and never names a
-                  skill. The oracle has to pass with reward 1.0 before any agent
-                  is run.
+                  A native BenchFlow{" "}
+                  <code className="font-mono text-sm">task.md</code> package. The
+                  prompt describes an outcome and never names a skill. The
+                  oracle must pass with reward 1.0 before any agent runs.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  Prompt bodies and oracle logic are human-authored — that rule
-                  is what keeps the benchmark grounded in real research rather
-                  than in generated exercises.
+                  Prompts and oracle logic are human-authored.
                 </p>
                 <Button
                   asChild
@@ -133,12 +131,10 @@ export default function Home() {
           <section id="tasks" className="scroll-mt-28">
             <div className="mb-10 space-y-3">
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-                Tasks in the repository
+                Example tasks
               </h2>
               <p className="text-muted-foreground max-w-2xl leading-relaxed">
-                The public set is small and early — these are the tasks merged
-                so far. There is no leaderboard yet; results are published once
-                the task set is large enough to mean something.
+                Each one comes from research a contributor had already done.
               </p>
             </div>
 
@@ -197,11 +193,9 @@ export default function Home() {
               Earn {credit.authorship} points, become a co-author
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto leading-relaxed">
-              Credit is tracked in points, and {credit.authorship} of them earns
-              co-authorship on the FrontierPhysics paper and the released
-              dataset. Reviewing counts too, so you can get there by authoring{" "}
-              {tasksForAuthorship} tasks, by reviewing, or by any mix that adds
-              up.
+              Co-authorship on the FrontierPhysics paper and dataset. Get there
+              with {tasksForAuthorship} authored tasks, by reviewing, or any mix
+              that adds up.
             </p>
 
             <dl className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto pt-2 text-left">
@@ -233,11 +227,6 @@ export default function Home() {
               ))}
             </dl>
 
-            <p className="text-muted-foreground max-w-xl mx-auto leading-relaxed">
-              No AI background required — if you can explain your analysis to a
-              new graduate student, you can author a task, and a maintainer will
-              walk you through the rest.
-            </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-1">
               <Button asChild>
                 <Link href="/contribute">Start your first task</Link>

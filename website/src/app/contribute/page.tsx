@@ -4,8 +4,8 @@ import {
   ArrowUpRight,
   Award,
   Check,
+  Clock,
   FlaskConical,
-  Layers,
   ShieldCheck,
   X,
 } from "lucide-react";
@@ -20,51 +20,72 @@ export const metadata: Metadata = {
 
 const CRITERIA = [
   {
-    title: "Representative",
-    body: "It comes from a workflow used in real physics research — something you or your group actually had to do.",
-    check: "Have I done this myself?",
+    title: "Your own work",
+    body: "Real research you carried out, not a problem invented for the benchmark.",
+    check: "Did I do this myself?",
     icon: FlaskConical,
     accent: "text-chart-1",
     tint: "bg-chart-1/10",
   },
   {
-    title: "Complex",
-    body: "It needs substantial domain expertise. An agent without mentor skills should need 100+ steps and 80+ tool calls, and should be likely to fail.",
-    check: "Would this take a new student days?",
-    icon: Layers,
+    title: "Weeks of effort",
+    body: "At least two weeks of genuine effort, with or without an agent helping.",
+    check: "Did it really take weeks to finish?",
+    icon: Clock,
     accent: "text-chart-2",
     tint: "bg-chart-2/10",
   },
   {
     title: "Verifiable",
-    body: "The deliverables can be graded deterministically — numbers, files, and artifacts a test can check without a human in the loop.",
-    check: "Can a script tell right from wrong?",
+    body: "The result is right or wrong, and a script can tell which.",
+    check: "Can a script grade it?",
     icon: ShieldCheck,
     accent: "text-chart-3",
     tint: "bg-chart-3/10",
   },
 ];
 
+const ELIGIBILITY = [
+  "A PhD or current PhD candidate in physics, EECS, or an adjacent field",
+  "Or extensive hands-on experience in a physics lab or an equivalent industry role",
+];
+
 const STEPS = [
   {
     step: "01",
     title: "Ideate",
-    body: "Pick a domain where you have real expertise and a project you have already done that meets the three criteria above.",
+    body: "Pick a project that meets all three. Bring it to group chat or confirm with a maintainer before you build.",
   },
   {
     step: "02",
     title: "Create",
-    body: "Write the task package: the prompt and metadata in task.md, a pinned Docker environment, mentor skills, the oracle solution, and the verifier.",
+    body: "Write the task package: prompt and metadata, Docker environment, mentor skills, oracle, verifier.",
   },
   {
     step: "03",
     title: "Test",
-    body: "Run the oracle, then run at least one agent both with and without skills so the PR carries real evidence.",
+    body: "Run the oracle, then at least one agent with and without skills, over multiple trials.",
   },
   {
     step: "04",
     title: "Submit",
-    body: "Open a PR with pass rates, failure analysis, and artifacts for any multimodal outputs.",
+    body: "Fork the repository and open a pull request against main.",
+  },
+];
+
+const SUBMISSION = [
+  {
+    title: "A PR from your fork",
+    body: "Fork this repository and open a pull request against main here. One task per PR, touching only files under tasks/<task-id>/.",
+  },
+  {
+    title: "A detailed PR description",
+    body: "The history of the task: what the original work was, its start and end dates, and how many working hours you spent. Plus the physics it exercises and where the data came from.",
+  },
+  {
+    title: "A local test results report",
+    body: "What you ran and what happened: the oracle at reward 1.0, and agent pass rates with and without skills across multiple trials.",
+    example: { label: "Example task: PR #2.", href: `${site.repo}/pull/2` },
   },
 ];
 
@@ -97,39 +118,25 @@ export default function Contribute() {
         <h1 className="text-4xl sm:text-5xl font-bold tracking-tight leading-[1.05]">
           Turn research you have already done into a benchmark task
         </h1>
-        <p className="text-lg text-muted-foreground leading-relaxed">
-          No AI background required. The hard part is the physics, and you have
-          already done that part.
-        </p>
-
         <div className="flex items-start gap-4 rounded-2xl border border-chart-2/40 bg-chart-2/5 p-6">
           <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-chart-2/15 text-chart-2">
             <Award className="h-5 w-5" aria-hidden="true" />
           </span>
-          <div className="space-y-3">
+          <div className="space-y-2">
             <h2 className="font-semibold tracking-tight">
               Earn {credit.authorship} points, become a co-author
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              A task you authored is worth{" "}
+              A merged task you authored earns{" "}
               <strong className="font-semibold text-foreground">
-                {credit.task} points
-              </strong>{" "}
-              when it merges; a task you reviewed is worth{" "}
+                {credit.task}
+              </strong>
+              , one you reviewed earns{" "}
               <strong className="font-semibold text-foreground">
                 {credit.review}
               </strong>
-              . At{" "}
-              <strong className="font-semibold text-foreground">
-                {credit.authorship} points
-              </strong>{" "}
-              you are a co-author on the FrontierPhysics paper and the released
-              dataset — {tasksForAuthorship} authored tasks, or any mix of
-              authoring and reviewing that adds up.
-            </p>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              <em>Merged</em> is the operative word. Points land on merge, not on
-              submission, and each task has to clear the bar below.
+              . {tasksForAuthorship} authored tasks gets you there, as does any
+              mix that adds up. Points land on merge.
             </p>
           </div>
         </div>
@@ -150,15 +157,29 @@ export default function Contribute() {
       </header>
 
       <section className="space-y-6 mb-20">
-        <div className="space-y-3">
-          <h2 className="text-2xl font-bold tracking-tight">
-            What makes a good task
-          </h2>
-          <p className="text-muted-foreground leading-relaxed">
-            All three at once. A task that misses any one of them will not
-            merge.
-          </p>
-        </div>
+        <h2 className="text-2xl font-bold tracking-tight">
+          Who should contribute
+        </h2>
+        <ul className="space-y-3">
+          {ELIGIBILITY.map((item) => (
+            <li key={item} className="flex gap-3 text-muted-foreground">
+              <Check
+                className="h-5 w-5 shrink-0 mt-0.5 text-chart-2"
+                aria-hidden="true"
+              />
+              <span className="leading-relaxed">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="space-y-6 mb-20">
+        <h2 className="text-2xl font-bold tracking-tight">
+          What makes an ideal task
+        </h2>
+        <p className="text-muted-foreground leading-relaxed">
+          All three. A task that misses any one will not merge.
+        </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {CRITERIA.map((item) => (
@@ -177,7 +198,9 @@ export default function Contribute() {
               <p className="text-sm text-muted-foreground leading-relaxed grow">
                 {item.body}
               </p>
-              <p className="mt-4 pt-4 border-t border-border text-sm font-medium">
+              {/* Two lines are reserved so the rule sits at the same height in
+                  every card, whether the question wraps or not. */}
+              <p className="mt-4 pt-4 border-t border-border text-sm font-medium leading-5 min-h-14">
                 {item.check}
               </p>
             </div>
@@ -185,8 +208,7 @@ export default function Contribute() {
         </div>
 
         <p className="border-l-2 border-border pl-4 text-sm text-muted-foreground leading-relaxed">
-          Quality beats quantity — one excellent task is worth more than many
-          mediocre ones.
+          One excellent task is worth more than many mediocre ones.
         </p>
       </section>
 
@@ -215,9 +237,7 @@ export default function Contribute() {
             What you must write yourself
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            You can use an AI assistant for the software plumbing. The science
-            has to be yours — a benchmark built from generated physics measures
-            nothing.
+            Use an AI assistant for the plumbing. The science has to be yours.
           </p>
         </div>
 
@@ -265,21 +285,53 @@ export default function Contribute() {
       <section className="space-y-6 mb-20">
         <div className="space-y-3">
           <h2 className="text-2xl font-bold tracking-tight">
-            Before you open the PR
+            The final submission
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            Both commands have to pass, and the oracle has to come back with
-            reward 1.0.
+            Three things.
           </p>
         </div>
+
+        <ol className="space-y-5">
+          {SUBMISSION.map((item, index) => (
+            <li key={item.title} className="flex gap-5">
+              <span className="font-mono text-sm text-muted-foreground pt-0.5 shrink-0">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <div className="space-y-1.5">
+                <h3 className="font-semibold tracking-tight">{item.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {item.body}
+                  {item.example ? (
+                    <>
+                      {" "}
+                      <a
+                        href={item.example.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-foreground underline underline-offset-4 hover:text-muted-foreground transition-colors"
+                      >
+                        {item.example.label}
+                      </a>
+                    </>
+                  ) : null}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <p className="text-sm text-muted-foreground leading-relaxed pt-2">
+          Before you open it, both of these have to pass, with the oracle
+          returning reward 1.0:
+        </p>
         <pre className="rounded-2xl border border-border bg-card p-6 overflow-x-auto text-xs sm:text-sm font-mono leading-loose text-muted-foreground">
           {CHECKS.join("\n")}
         </pre>
-        <p className="text-sm text-muted-foreground">
-          Then run at least one agent with and without skills, and put the pass
-          rates and failure analysis in the PR description. The prompt must
-          never mention a skill by name, and the verifier must check the
-          science, not which tools the agent reached for.
+
+        <p className="border-l-2 border-border pl-4 text-sm text-muted-foreground leading-relaxed">
+          Give real dates and an honest hour count, and report only the runs you
+          actually completed.
         </p>
       </section>
 
@@ -288,8 +340,7 @@ export default function Contribute() {
           Ten minutes of triage can save a weekend
         </h2>
         <p className="text-muted-foreground max-w-lg mx-auto leading-relaxed">
-          Bring your task idea to Discord before you build it. A maintainer will
-          tell you quickly whether it clears the bar.
+          Bring your idea to Discord before you build it.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Button asChild>

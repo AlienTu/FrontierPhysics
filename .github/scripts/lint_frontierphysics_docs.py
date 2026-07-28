@@ -41,6 +41,10 @@ def documentation_files() -> list[Path]:
     files = [path for path in DOC_ROOTS if path.is_file()]
     files.extend((ROOT / "docs").rglob("*.md"))
     files.extend((ROOT / ".agents").rglob("*.md"))
+    # The public website is documentation too. It sat outside this check long
+    # enough to accumulate stale branding the check exists to prevent.
+    files.extend(path for path in (ROOT / "website").glob("*.md"))
+    files.extend((ROOT / "website" / "src").rglob("*.md"))
     return sorted(set(files))
 
 

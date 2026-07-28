@@ -16,8 +16,12 @@ DOC_ROOTS = (
     ROOT / "experiments" / "README.md",
     ROOT / ".github" / "PULL_REQUEST_TEMPLATE.md",
 )
+# Catches branding copied over from the other benchmark — its domain and its
+# repository path. The bare product name is deliberately allowed: this team
+# authored SkillsBench and cites it as prior work, which is attribution rather
+# than the stale branding this check exists to remove.
 FORBIDDEN = re.compile(
-    r"skills\s*bench|skillsbench\.ai|benchflow/skillsbench",
+    r"skillsbench\.ai|benchflow/skillsbench",
     re.IGNORECASE,
 )
 README_HEADINGS = (

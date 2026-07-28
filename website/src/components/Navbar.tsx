@@ -69,21 +69,34 @@ export function Navbar() {
       </div>
 
       <ul className="hidden lg:flex items-center gap-1">
-        {navItems.map((item) => (
-          <li key={item.href}>
-            <Link
-              href={item.href}
-              className={cn(
-                "text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-muted/50",
-                pathname === item.href
-                  ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground",
+        {navItems.map((item) => {
+          const className = cn(
+            "text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-muted/50",
+            pathname === item.href
+              ? "text-foreground"
+              : "text-muted-foreground hover:text-foreground",
+          );
+          return (
+            <li key={item.href}>
+              {"external" in item && item.external ? (
+                // Docs live in the repository, so this leaves the site rather
+                // than routing to a mirrored copy.
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={className}
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link href={item.href} className={className}>
+                  {item.label}
+                </Link>
               )}
-            >
-              {item.label}
-            </Link>
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ul>
 
       <div className="flex items-center gap-2 pl-2">
@@ -177,16 +190,32 @@ export function Navbar() {
           {mobileMenuOpen && (
             <div className="absolute right-0 top-10 w-48 p-2 rounded-xl border border-border bg-popover text-popover-foreground shadow-lg">
               <div className="flex flex-col gap-1">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-3 py-2 rounded-lg hover:bg-muted/50"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+                {navItems.map((item) => {
+                  const className =
+                    "text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-3 py-2 rounded-lg hover:bg-muted/50";
+                  const close = () => setMobileMenuOpen(false);
+                  return "external" in item && item.external ? (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={close}
+                      className={className}
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={close}
+                      className={className}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           )}

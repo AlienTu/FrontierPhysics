@@ -1,6 +1,6 @@
 import { HeroBackground } from "@/components/HeroBackground";
 import { Button } from "@/components/ui/button";
-import { credit, site, tasksForAuthorship } from "@/lib/site";
+import { credit, site } from "@/lib/site";
 import { getTasks } from "@/lib/tasks";
 import { ArrowRight, ArrowUpRight, Award } from "lucide-react";
 import Link from "next/link";
@@ -99,27 +99,12 @@ export default function Home() {
                 <p className="text-muted-foreground leading-relaxed">
                   A native BenchFlow{" "}
                   <code className="font-mono text-sm">task.md</code> package. The
-                  prompt describes an outcome and never names a skill. The
+                  prompt describes an outcome and never names any skill. The
                   oracle must pass with reward 1.0 before any agent runs.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
                   Prompts and oracle logic are human-authored.
                 </p>
-                <Button
-                  asChild
-                  variant="secondary"
-                  size="sm"
-                  className="border border-border"
-                >
-                  <a
-                    href={site.contributing}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Read the contributor guide
-                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                  </a>
-                </Button>
               </div>
 
               <pre className="rounded-2xl border border-border bg-card p-6 overflow-x-auto text-xs sm:text-sm font-mono leading-relaxed text-muted-foreground">
@@ -184,64 +169,6 @@ export default function Home() {
             )}
           </section>
 
-          <section className="rounded-2xl border border-border bg-card p-8 sm:p-10 text-center space-y-5">
-            <span className="inline-flex items-center gap-2 rounded-full border border-chart-2/50 bg-chart-2/10 px-4 py-1.5 text-xs font-medium">
-              <Award className="h-3.5 w-3.5 text-chart-2" aria-hidden="true" />
-              What you get
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-              Earn {credit.authorship} points, become a co-author
-            </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto leading-relaxed">
-              Co-authorship on the FrontierPhysics paper and dataset. Get there
-              with {tasksForAuthorship} authored tasks, by reviewing, or any mix
-              that adds up.
-            </p>
-
-            <dl className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto pt-2 text-left">
-              {[
-                {
-                  points: `+${credit.task}`,
-                  label: "A task you authored is merged",
-                },
-                {
-                  points: `+${credit.review}`,
-                  label: "A task you reviewed is merged",
-                },
-                {
-                  points: credit.authorship,
-                  label: "Co-authorship on the paper and dataset",
-                },
-              ].map((row) => (
-                <div
-                  key={row.label}
-                  className="rounded-xl border border-border bg-background p-4"
-                >
-                  <dt className="text-2xl font-bold tracking-tight tabular-nums">
-                    {row.points}
-                  </dt>
-                  <dd className="mt-1 text-sm text-muted-foreground leading-relaxed">
-                    {row.label}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-1">
-              <Button asChild>
-                <Link href="/contribute">Start your first task</Link>
-              </Button>
-              <Button
-                asChild
-                variant="secondary"
-                className="border border-border"
-              >
-                <a href={site.discord} target="_blank" rel="noopener noreferrer">
-                  Ask on Discord
-                </a>
-              </Button>
-            </div>
-          </section>
         </div>
       </main>
     </div>

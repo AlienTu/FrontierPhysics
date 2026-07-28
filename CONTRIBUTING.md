@@ -18,10 +18,18 @@ Points accumulate across both kinds of work, so three merged tasks reaches 12,
 and so does any mix that adds up — two merged tasks plus four reviews, for
 example.
 
+Reviewing opens up once you have your first good task merged: authoring one is
+how you demonstrate you can judge someone else's. Ask a maintainer to be added
+as a reviewer.
+
+**Only tasks merged by 20 August 2026 count toward points.** Merged, not
+opened — review and revision take days of back-and-forth, so a PR opened close
+to the deadline is unlikely to land in time.
+
 Points are awarded on merge, not on submission: a review earns its point only
 once the task it reviewed is merged. Quality beats quantity — one excellent task
 is worth more than many mediocre ones, and a submission that does not clear the
-bar in [What makes a good task](#what-makes-a-good-task) earns nothing.
+bar in [What makes an ideal task](#what-makes-an-ideal-task) earns nothing.
 
 # Who should contribute
 A PhD or current PhD candidate in physics, EECS, or an adjacent field — or
@@ -43,10 +51,16 @@ A task that misses any one of these will not merge.
 1. **Ideate**: Pick a project that meets all three. Bring it to group chat or
    confirm with a maintainer before you build.
 2. **Create**: Implement the task package. See `Task Package` below.
-3. **Test**: Run the oracle, then run at least one agent with and without
-   skills.
-4. **Submit**: Fork this repository and open a PR against `main` here. See
-   [PR Requirements](#pr-requirements).
+3. **Test**: Run the oracle, then run a state-of-the-art agent with and
+   without skills, over multiple trials.
+4. **Submit**: Fork this repository and open a draft PR against `main` here
+   as soon as the shape is there, then iterate with a maintainer. See
+   [The final submission](#the-final-submission).
+
+Open the PR as a **draft** as soon as you have the task idea and a skeleton —
+do not wait until it is polished. Reviewing and revising a task takes days of
+back-and-forth, so iterating with a maintainer in a draft is both faster than
+guessing and the only reliable way to merge before the deadline.
 
 # Task Package
 Technically, a task consists of:
@@ -128,8 +142,10 @@ Reviewers look for:
 - **Verification**: deterministic, outcome-based, anti-cheat aware.
 - **Instructions**: concise, fair, no skill hints.
 - **Environment**: reproducible Docker image, pinned deps, no leaked skills.
-- **Complexity**: took the author two weeks or more, and agents without skills
-  are likely to fail it.
+- **Complexity**: clears every minimum in
+  [A detailed PR description](#2-a-detailed-pr-description) — two weeks, 40
+  working hours, 10 hours to reproduce — and agents without skills are
+  likely to fail it.
 
 # The final submission
 
@@ -147,16 +163,23 @@ The description is part of the submission, not a formality — it is the evidenc
 a reviewer uses to judge provenance and difficulty. Explain the history of the
 task: where this work came from and what it cost you.
 
-| Field | Example |
-|---|---|
-| What the original work was | the analysis, measurement, or simulation, and why you were doing it |
-| Start date | 2025-03-04 |
-| End date | 2025-03-28 |
-| Working hours spent | approximately 60 hours over three weeks |
-| Whether an LLM agent helped | and if so, on which parts |
+Report these three in a table. Each carries a minimum; a submission below any
+of them will not merge.
 
-Give real dates and an honest hour count. A task that took you two days is not
-a fit, and saying so early saves everyone a review cycle.
+| Report | Minimum | Example |
+|---|---|---|
+| Project time scale — start and end date | 2 weeks | 2025-03-04 → 2025-03-28 |
+| Actual working hours spent exploring the task | 40 hours | approximately 60 hours |
+| Estimated hours for a first-year PhD to reproduce the results | 10 hours | approximately 15 hours |
+
+The third is a backward estimate, not a measurement: assume a capable
+first-year PhD student in the field, already given the task prompt and data,
+and estimate how long reproducing your results would take them. It is the best
+single proxy for whether the task is substantial enough to be worth grading.
+
+Also state what the original work was and whether an LLM agent helped, and on
+which parts. Give real dates and an honest hour count — a task that took you
+two days is not a fit, and saying so early saves everyone a review cycle.
 
 Also cover the scientific motivation: what physics the task exercises, who does
 this kind of work, and where the data or model came from — with citations and
@@ -169,7 +192,8 @@ Before you open the PR, confirm all of these locally:
 1. `bench tasks check tasks/<task-id>` passes.
 2. `bench eval run --tasks-dir tasks/<task-id> --agent oracle --sandbox docker`
    passes with reward 1.0.
-3. At least one agent has been run both with and without skills.
+3. A state-of-the-art agent has been run both with and without skills,
+   over multiple trials.
 4. The task prompt, oracle, skills, tests, and metadata are ready for human
    review.
 

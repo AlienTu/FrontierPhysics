@@ -5,15 +5,23 @@ work?
 
 ## Task history
 
-This task must come from research you personally carried out, and which took
-you two weeks or more. Give real dates and an honest hour count.
+This task must come from research you personally carried out. Give real dates
+and an honest hour count — each row below carries a minimum, and a submission
+under any of them will not merge.
+
+| Report | Minimum | Value |
+|---|---|---|
+| Project time scale — start and end date | 2 weeks | YYYY-MM-DD → YYYY-MM-DD |
+| Actual working hours spent exploring the task | 40 hours | |
+| Estimated hours for a first-year PhD to reproduce the results | 10 hours | |
+
+The last row is a backward estimate: assume a capable first-year PhD student in
+the field, already handed the task prompt and data, and estimate how long
+reproducing your results would take them.
 
 | Field | Value |
 |---|---|
 | What the original work was | |
-| Start date | YYYY-MM-DD |
-| End date | YYYY-MM-DD |
-| Working hours spent | |
 | Did an LLM agent help, and where? | |
 | Your background | PhD / PhD candidate / lab or industry experience |
 

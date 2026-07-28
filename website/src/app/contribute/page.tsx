@@ -1,5 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { credit, site, tasksForAuthorship } from "@/lib/site";
+import {
+  credit,
+  scoringDeadline,
+  site,
+  tasksForAuthorship,
+} from "@/lib/site";
 import {
   ArrowUpRight,
   Award,
@@ -10,7 +15,6 @@ import {
   X,
 } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Contribute a task",
@@ -69,7 +73,7 @@ const STEPS = [
   {
     step: "04",
     title: "Submit",
-    body: "Fork the repository and open a pull request against main.",
+    body: "Fork the repository and open a draft pull request against main as soon as the shape is there, then iterate with a maintainer.",
   },
 ];
 
@@ -80,11 +84,21 @@ const SUBMISSION = [
   },
   {
     title: "A detailed PR description",
-    body: "The history of the task: what the original work was, its start and end dates, and how many working hours you spent. Plus the physics it exercises and where the data came from.",
+    body: "What the original work was, the physics it exercises, and where the data came from — plus a table reporting its history against these minimums.",
+    report: [
+      ["Project time scale — start and end date", "2 weeks"],
+      ["Actual working hours spent exploring the task", "40 hours"],
+      ["Estimated hours for a first-year PhD to reproduce it", "10 hours"],
+    ] as [string, string][],
   },
   {
     title: "A local test results report",
-    body: "What you ran and what happened: the oracle at reward 1.0, and agent pass rates with and without skills across multiple trials.",
+    body: "What you ran and what happened, across multiple trials rather than a single run.",
+    checks: [
+      "The oracle passes with reward exactly 1.0",
+      "Results for a state-of-the-art agent with skills",
+      "Results for the same agent without skills",
+    ],
     example: { label: "Example task: PR #2.", href: `${site.repo}/pull/2` },
   },
 ];
@@ -101,11 +115,6 @@ const AI_CAN_HELP = [
   "Boilerplate for the verifier test harness",
   "Formatting metadata and frontmatter",
   "Tidying prose you have already written",
-];
-
-const CHECKS = [
-  "bench tasks check tasks/<task-id>",
-  "bench eval run --tasks-dir tasks/<task-id> --agent oracle --sandbox docker",
 ];
 
 export default function Contribute() {
@@ -137,6 +146,31 @@ export default function Contribute() {
               </strong>
               . {tasksForAuthorship} authored tasks gets you there, as does any
               mix that adds up. Points land on merge.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Reviewing opens up once you have your first good task merged — ask
+              a maintainer to be added as a reviewer.
+            </p>
+            <p className="text-sm leading-relaxed">
+              <strong className="font-semibold text-foreground">
+                Only tasks merged by {scoringDeadline} count.
+              </strong>{" "}
+              <span className="text-muted-foreground">
+                Merged, not opened — review and revision take days of
+                back-and-forth, so leave room for it.
+              </span>
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              From the team behind{" "}
+              <a
+                href={site.skillsbenchPaper}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-foreground underline underline-offset-4 hover:text-muted-foreground transition-colors"
+              >
+                SkillsBench
+              </a>
+              , which passed 100 citations within three months of release.
             </p>
           </div>
         </div>
@@ -288,7 +322,10 @@ export default function Contribute() {
             The final submission
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            Three things.
+            Three things. Open it as a draft long before it is finished —
+            reviewing and revising a task takes days of back-and-forth, and a
+            draft is the cheapest way to find out early that an idea will not
+            clear the bar.
           </p>
         </div>
 
@@ -316,42 +353,53 @@ export default function Contribute() {
                     </>
                   ) : null}
                 </p>
+                {"report" in item && item.report ? (
+                  <div className="overflow-x-auto pt-1">
+                    <table className="w-full text-sm border-collapse">
+                      <thead>
+                        <tr className="border-b border-border">
+                          <th className="text-left font-medium py-2 pr-4">
+                            Report
+                          </th>
+                          <th className="text-left font-medium py-2 whitespace-nowrap">
+                            Minimum
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {item.report.map(([field, minimum]) => (
+                          <tr key={field} className="border-b border-border/60">
+                            <td className="py-2 pr-4 text-muted-foreground leading-relaxed">
+                              {field}
+                            </td>
+                            <td className="py-2 font-medium tabular-nums whitespace-nowrap">
+                              {minimum}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : null}
+                {"checks" in item && item.checks ? (
+                  <ul className="space-y-2 pt-1">
+                    {item.checks.map((check) => (
+                      <li key={check} className="flex gap-2.5 text-sm">
+                        <Check
+                          className="h-4 w-4 shrink-0 mt-0.5 text-chart-2"
+                          aria-hidden="true"
+                        />
+                        <span className="text-muted-foreground leading-relaxed">
+                          {check}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
             </li>
           ))}
         </ol>
-
-        <p className="text-sm text-muted-foreground leading-relaxed pt-2">
-          Before you open it, both of these have to pass, with the oracle
-          returning reward 1.0:
-        </p>
-        <pre className="rounded-2xl border border-border bg-card p-6 overflow-x-auto text-xs sm:text-sm font-mono leading-loose text-muted-foreground">
-          {CHECKS.join("\n")}
-        </pre>
-
-        <p className="border-l-2 border-border pl-4 text-sm text-muted-foreground leading-relaxed">
-          Give real dates and an honest hour count, and report only the runs you
-          actually completed.
-        </p>
-      </section>
-
-      <section className="rounded-2xl border border-border bg-card p-8 text-center space-y-5">
-        <h2 className="text-2xl font-bold tracking-tight">
-          Ten minutes of triage can save a weekend
-        </h2>
-        <p className="text-muted-foreground max-w-lg mx-auto leading-relaxed">
-          Bring your idea to Discord before you build it.
-        </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button asChild>
-            <a href={site.discord} target="_blank" rel="noopener noreferrer">
-              Join Discord
-            </a>
-          </Button>
-          <Button asChild variant="secondary" className="border border-border">
-            <Link href="/#tasks">See existing tasks</Link>
-          </Button>
-        </div>
       </section>
     </main>
   );

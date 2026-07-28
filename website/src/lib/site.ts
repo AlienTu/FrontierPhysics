@@ -12,7 +12,14 @@ export const site = {
   taxonomy:
     "https://github.com/benchflow-ai/FrontierPhysics/blob/main/taxonomy.md",
   tasksTree: "https://github.com/benchflow-ai/FrontierPhysics/tree/main/tasks",
+  /**
+   * Docs are read straight from the repository rather than mirrored here, so
+   * there is only ever one copy to maintain and the site cannot go stale.
+   */
+  docs: "https://github.com/benchflow-ai/FrontierPhysics/tree/main/docs",
   benchflow: "https://github.com/benchflow-ai/benchflow",
+  /** Prior work by the same team, cited as evidence the benchmark will ship. */
+  skillsbenchPaper: "https://arxiv.org/abs/2602.12670",
 } as const;
 
 /**
@@ -32,8 +39,19 @@ export const credit = {
 /** Merged tasks needed to reach co-authorship on authoring alone. */
 export const tasksForAuthorship = credit.authorship / credit.task;
 
+/**
+ * Cut-off for points. A task only scores if it is *merged* by this date, not
+ * merely opened, which is why the guidance pushes contributors to open a draft
+ * early rather than polish in private.
+ */
+export const scoringDeadline = "20 August 2026";
+
 export const navItems = [
-  { href: "/#anatomy", label: "Task format" },
   { href: "/#tasks", label: "Tasks" },
   { href: "/contribute", label: "Contribute" },
-] as const;
+  { href: site.docs, label: "Docs", external: true },
+] as const satisfies readonly {
+  href: string;
+  label: string;
+  external?: boolean;
+}[];

@@ -4,6 +4,10 @@ FrontierPhysics evaluates how agents help with Physics research. Specifically, w
 To achieve this, we need contributors from the broad Physics community to add diverse, authetic, challenging, and well-tested task packages. 
 
 **Links**: 
+[Website] (https://www.benchflow.ai/frontierphysics) 
+[Github] (https://github.com/benchflow-ai/FrontierPhysics.git)
+[BenchFlow CLI] (https://github.com/benchflow-ai/benchflow)
+[SkillsBench Paper] (https://arxiv.org/abs/2602.12670)
 
 # Authorship policy
 Contribution credit is tracked in points, and **12 points earns co-authorship**

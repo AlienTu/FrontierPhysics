@@ -61,7 +61,10 @@ export function Navbar() {
     >
       <div className="flex items-center gap-2 font-bold hover:text-primary transition-colors">
         <Link href="/" className="flex items-center gap-2">
-          <FrontierPhysicsLogo className="w-6 h-6" />
+          {/* The mark's orbit fills two thirds of its box, so it needs a
+              larger frame than the old icon to carry the same optical weight
+              next to the wordmark. */}
+          <FrontierPhysicsLogo className="w-7 h-7" />
           <span className="hidden sm:inline-block tracking-tight">
             {site.name}
           </span>

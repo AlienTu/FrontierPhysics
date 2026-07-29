@@ -16,10 +16,29 @@ import {
 } from "lucide-react";
 import type { Metadata } from "next";
 
+const title = "Contribute a task";
+const description =
+  "How to turn physics research you have already done into a FrontierPhysics benchmark task.";
+
 export const metadata: Metadata = {
-  title: "Contribute a task",
-  description:
-    "How to turn physics research you have already done into a FrontierPhysics benchmark task.",
+  title,
+  description,
+  // Without its own canonical this page would inherit the home page's and be
+  // dropped from search results as a duplicate.
+  alternates: { canonical: `${site.url}/contribute` },
+  openGraph: {
+    title: `${title} | ${site.name}`,
+    description,
+    url: `${site.url}/contribute`,
+    siteName: site.name,
+    locale: "en_US",
+    type: "article",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${title} | ${site.name}`,
+    description,
+  },
 };
 
 const CRITERIA = [

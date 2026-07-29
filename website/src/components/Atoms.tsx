@@ -104,9 +104,9 @@ function icosphere(depth: number): { vertices: Vec3[]; edges: [number, number][]
 }
 
 /**
- * Renders one atom — a nucleus inside three orbital ellipses, the same glyph as
- * the FrontierPhysics mark — into an offscreen canvas, so the loop blits a
- * sprite per vertex instead of re-stroking three ellipses every frame.
+ * Renders one atom — a nucleus inside three orbital ellipses — into an
+ * offscreen canvas, so the loop blits a sprite per vertex instead of
+ * re-stroking three ellipses every frame.
  */
 function createAtomSprite(
   color: string,

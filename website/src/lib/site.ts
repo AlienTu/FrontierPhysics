@@ -3,6 +3,14 @@ export const site = {
   tagline: "Are AI agents good physicists?",
   description:
     "FrontierPhysics is an open benchmark measuring whether AI agents can carry out authentic, specialist-level physics research.",
+  /**
+   * Where the site is served from. `origin` is what `metadataBase` resolves
+   * relative URLs against: the file-based icon and share-image routes already
+   * carry the `/frontierphysics` basePath in their paths, so including it here
+   * as well would double it. `url` is the canonical address of the home page.
+   */
+  origin: "https://www.benchflow.ai",
+  url: "https://www.benchflow.ai/frontierphysics",
   repo: "https://github.com/benchflow-ai/FrontierPhysics",
   discord: "https://discord.gg/G9dg3EfSva",
   contributing:

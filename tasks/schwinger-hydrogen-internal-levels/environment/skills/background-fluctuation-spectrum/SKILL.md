@@ -1,29 +1,29 @@
 ---
 name: background-fluctuation-spectrum
-description: Compute localized semiclassical excitation spectra around static one-dimensional scalar-field backgrounds with controlled continuum and finite-volume diagnostics.
+description: Derive and compute weakly bound localized modes around screened static charges in one-dimensional field theories, including bosonization conventions, large-box spectral checks, and asymptotic fitting.
 ---
 
-# Background and fluctuation spectra
+# Screened backgrounds and weakly bound modes
 
-Use this workflow when a field theory problem asks whether a static defect,
-screening cloud, soliton, or impurity supports localized small excitations.
+Use this workflow for a static external charge in the one-flavour Schwinger
+model.
 
-1. Nondimensionalize before discretizing. Derive the static Euler-Lagrange
-   equation and both asymptotic vacua from the supplied Hamiltonian.
-2. Exploit exact reflection or charge-conjugation symmetries when they exist.
-   Solve the nonlinear background as a boundary-value problem and verify its
-   residual independently.
-3. Form the second variation of the energy about that background. Put the
-   kinetic term in canonical normalization before interpreting eigenvalues as
-   squared frequencies.
-4. Determine the continuum edge from the asymptotic fluctuation operator, not
-   from the largest computed eigenvalue.
-5. Solve only for the low end of the self-adjoint spectrum. A physical
-   localized mode must have positive squared frequency, lie below the
-   continuum edge, and remain normalizable as the box grows.
-6. Repeat at larger boxes and finer grids. Track eigenvalues and localization
-   measures rather than relying on the number of finite-box eigenvectors.
-7. Reconstruct physical observables from the background using the conventions
-   in the problem statement.
+1. Translate the fermionic theory to a scalar description using Coleman
+   normal ordering at the massless Schwinger scale.
+2. Fix all normalization factors before solving. The useful conventions and
+   source boundary conditions are in `references/schwinger-conventions.md`.
+3. Solve the nonlinear screened background as a boundary-value problem. Use
+   reflection symmetry to place the source exactly at a half-domain boundary.
+4. Construct the canonically normalized second variation about the background.
+5. Diagonalize the symmetric tridiagonal discretization at the bottom of the
+   spectrum. The first eigenvalue is a candidate internal mode. The next
+   eigenvalue is a useful finite-box estimate of the continuum edge.
+6. Increase the box until the first mode is stable and the second eigenvalue
+   approaches the analytic asymptotic threshold.
+7. Refine the grid and extrapolate the lowest eigenvalue in the grid spacing.
+8. Fit the binding curve only after checking local log slopes and varying the
+   largest mass ratio retained in the fit.
 
-Read `references/numerical-checks.md` before finalizing the spectrum.
+Do not treat the first discretized continuum state as an internal excitation.
+For a very shallow mode, choose the box from the mode's decay length rather
+than from the much shorter background-field length scale.

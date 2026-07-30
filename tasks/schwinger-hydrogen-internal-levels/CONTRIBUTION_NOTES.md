@@ -1,16 +1,20 @@
 # Contribution notes — author review required
 
-This package is a technical draft for a FrontierPhysics contribution. Before
-opening the upstream pull request, the contributor must personally review and
-rewrite the prompt and oracle as needed to satisfy FrontierPhysics's
-human-authorship policy.
+This package is a technical draft for a FrontierPhysics contribution. The
+scientific task was developed from the contributor's research question about
+the weak-mass internal spectrum of a screened external charge in the massive
+Schwinger model. Before opening the upstream pull request, the contributor
+must personally review the prompt and oracle as needed to satisfy
+FrontierPhysics's human-authorship policy.
 
 ## Scientific provenance
 
-The task represents prior research on whether a screened heavy-light bound
-state in \(1+1\)-dimensional QED supports neutral localized excitations. The
-continuum convention is the Coleman-normal-ordered massive Schwinger model at
-normal-ordering mass \(\mu=e/\sqrt{\pi}\). No external dataset is used.
+The task asks whether a screened heavy-light bound state in
+\(1+1\)-dimensional QED supports a localized neutral excitation and determines
+the first two nonzero terms of its weak-\(m/e\) binding curve. The continuum
+convention is the Coleman-normal-ordered massive Schwinger model at
+normal-ordering mass \(g=e/\sqrt{\pi}\), with
+\(\kappa^2=e^\gamma m g/\pi\). No external dataset is used.
 
 Relevant primary sources to cite in the pull request:
 

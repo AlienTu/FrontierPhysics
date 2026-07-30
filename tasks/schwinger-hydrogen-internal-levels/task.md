@@ -26,7 +26,7 @@ metadata:
   - theoretical-physics
   - quantum-electrodynamics
   - schwinger-model
-  - bound-states
+  - weak-binding
   - spectral-analysis
 verifier:
   type: test-script
@@ -48,86 +48,94 @@ environment:
   gpus: 0
 ---
 
-Determine whether a hydrogen-like atom in one-flavour massive QED in \(1+1\)
-dimensions has localized internal energy levels at leading semiclassical order.
-The atom consists of one infinitely heavy external charge \(+e\) fixed at the
-origin and the dynamical Dirac field of charge \(-e\) and mass \(m\) that
-screens it. Work at \(\theta=0\) on the infinite line.
-
-Use \(\mu=e/\sqrt{\pi}\) as the unit of energy and \(\xi=\mu x\) as the
-dimensionless coordinate. Coleman normal ordering is fixed at \(\mu\). For
-avoidance of convention ambiguity, the continuum effective Hamiltonian that
-defines the requested leading-semiclassical observable is
+Consider one-flavour massive QED in \(1+1\) dimensions,
 
 \[
-\frac{\mathcal H}{\mu^2}
-=\frac{1}{8\pi}\left[
-  \Pi_\varphi^2+(\partial_\xi\varphi)^2+
-  \bigl(\varphi+2\pi\Theta(\xi)\bigr)^2
-\right]
-+\frac{e^\gamma}{2\sqrt{\pi}}\frac{m}{e}
- \left(1-\cos\varphi\right),
+\mathcal L=
+-\frac14F_{\mu\nu}F^{\mu\nu}
++\bar\psi(i\gamma^\mu D_\mu-m)\psi
+-A_\mu j^\mu_{\mathrm{ext}},
+\qquad
+j^0_{\mathrm{ext}}(x)=e\,\delta(x),\quad
+j^1_{\mathrm{ext}}(x)=0.
 \]
 
-where \(\gamma\) is Euler's constant and \(\Theta(0)=1/2\). The screened
-ground-state sector obeys
-\(\varphi(-\infty)=0\) and \(\varphi(+\infty)=-2\pi\).
-An internal level means a normalizable neutral excitation about the
-lowest-energy screened static state whose positive frequency lies strictly
-below the infinite-volume continuum threshold. Do not count negative modes,
-zero modes, or finite-box discretizations of the continuum.
+The external source is an infinitely heavy positive unit charge fixed at the
+origin. Work at \(\theta=0\), on the infinite line, in the neutral sector in
+which the external charge is completely screened by the dynamical field. This
+is the \(1+1\)-dimensional analogue of a hydrogen atom.
 
-Evaluate the spectrum for
+Determine, at leading semiclassical order, whether the screened atom has a
+localized neutral internal excitation when \(m/e\ll1\). You may use any
+equivalent analytical or numerical formulation; no particular field
+variables, transformation, or computational method are prescribed.
+
+Use
 
 \[
-m/e \in \{0.05,\;0.10,\;0.25,\;0.50,\;1.00\}.
+\mu=\frac{e}{\sqrt{\pi}}
 \]
 
-Use an infinite-volume extrapolation or a sufficiently documented convergence
-study so that every reported frequency and continuum threshold is accurate to
-three significant figures. You may use any valid analytical or numerical
-method.
+as the energy unit. For each mass ratio \(r=m/e\), define:
 
-Write `/root/atom_spectrum.json` with this exact top-level structure:
+- \(\omega_{\mathrm{th}}(r)\), the lowest neutral scattering threshold;
+- \(\omega_{\mathrm{int}}(r)\), the lowest positive-frequency normalizable
+  excitation localized near the external charge;
+- \(E_B(r)=\omega_{\mathrm{th}}(r)-\omega_{\mathrm{int}}(r)\).
+
+A finite-box continuum eigenvalue is not an internal level. Count a mode only
+if it remains below the infinite-volume threshold and localized near the
+source as the box and numerical resolution are increased.
+
+Evaluate
+
+\[
+r\in\{
+0.00025,\ 0.000375,\ 0.0005,\ 0.00075,\ 0.001,\ 0.0015,\
+0.002,\ 0.003,\ 0.004
+\}.
+\]
+
+Use the computed weak-mass curve to determine the first two nonzero terms
+
+\[
+\frac{E_B(r)}{\mu}
+=c_p r^p+c_{p+1}r^{p+1}+o(r^{p+1}),
+\]
+
+without assuming \(p\) in advance. Report the integer leading power \(p\), its
+coefficient \(c_p\), and the first correction coefficient \(c_{p+1}\).
+
+Write `/root/binding_curve.csv` with exactly this header:
+
+```text
+mass_over_e,continuum_threshold_mu,internal_frequency_mu,binding_energy_mu,binding_over_r_squared
+```
+
+Include exactly the nine requested mass ratios in increasing order. All
+frequencies and energies are in units of \(\mu\). Retain enough digits to
+resolve the smallest binding energy.
+
+Write `/root/asymptotics.json` with exactly this structure:
 
 ```json
 {
   "energy_unit": "mu=e/sqrt(pi)",
-  "classification": "localized-internal-levels-present or no-localized-internal-levels",
-  "levels": [
-    {
-      "mass_over_e": 0.05,
-      "continuum_threshold_mu": 0.0,
-      "bound_state_count": 0,
-      "bound_frequencies_mu": [],
-      "lowest_binding_gap_mu": 0.0
-    }
-  ]
+  "internal_level_exists": true,
+  "leading_power": 0,
+  "leading_coefficient": 0.0,
+  "next_power": 0,
+  "next_coefficient": 0.0,
+  "fit_mass_ratio_max": 0.0
 }
 ```
 
-Include exactly one `levels` entry for each requested mass ratio, in increasing
-order. Frequencies must be positive and sorted. Define
-`lowest_binding_gap_mu` as the continuum threshold minus the lowest bound
-frequency, or `0.0` if no bound state exists. Set `classification` to
-`localized-internal-levels-present` if at least one requested parameter point
-has an internal level.
+Set `internal_level_exists` from the infinite-volume result, not from the
+presence of a finite-box eigenvalue. Set `fit_mass_ratio_max` to the largest
+mass ratio included in the asymptotic coefficient fit.
 
-Also write `/root/screening_profile.csv` for \(m/e=0.25\). It must contain the
-header
-
-```text
-xi,phi,electric_field_over_e
-```
-
-and exactly 601 data rows at \(\xi=-12.00,-11.96,\ldots,12.00\). Here
-
-\[
-\frac{E(\xi)}{e} =
-\frac{\varphi(\xi)+2\pi\Theta(\xi)}{2\pi}.
-\]
-
-Finally, write `/root/method.md` describing the physical criterion used to
-separate localized levels from the continuum and a numerical convergence
-check. The scientific values, rather than the choice of method or software,
-will be graded.
+Finally, write `/root/report.md`. State the physical criterion used to
+distinguish the localized mode from the continuum, document at least two box
+sizes and two spatial resolutions, and show how the inferred asymptotic
+coefficients change under at least two fit windows. The scientific result,
+rather than the choice of method or software, will be graded.

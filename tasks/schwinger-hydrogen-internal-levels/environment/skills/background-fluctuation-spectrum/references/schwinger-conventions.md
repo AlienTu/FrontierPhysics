@@ -56,6 +56,20 @@ Its infinite-volume continuum threshold is
 \omega_{\rm th}=\sqrt{g^2+2\pi\kappa^2}.
 \]
 
+The most stable weak-binding observable is the direct eigenvalue difference
+
+\[
+\Delta_B=\omega_{\rm th}^2-\omega_{\rm int}^2.
+\]
+
+Use this squared-frequency gap for asymptotic fitting. The ordinary binding
+energy can be recovered, if desired, from
+
+\[
+\omega_{\rm th}-\omega_{\rm int}
+=\frac{\Delta_B}{\omega_{\rm th}+\omega_{\rm int}}.
+\]
+
 In units \(g=1\), the input ratio \(r=m/e\) implies
 
 \[

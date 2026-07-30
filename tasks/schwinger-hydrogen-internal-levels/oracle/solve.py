@@ -26,12 +26,12 @@ WEAK_DECAY_CONSTANT = float(EULER_GAMMA + np.log(np.pi) - CI_PI)
 @dataclass(frozen=True)
 class SpectralResult:
     ratio: float
-    threshold: float
-    internal_frequency: float
-    binding_energy: float
+    threshold_squared: float
+    internal_squared: float
+    squared_gap: float
     coarse_internal_squared: float
     fine_internal_squared: float
-    second_box_frequency: float
+    second_box_squared: float
     box_half_length: float
     coarse_spacing: float
     fine_spacing: float
@@ -118,7 +118,6 @@ def lowest_two_squared(
 def solve_ratio(mass_over_e: float) -> SpectralResult:
     kappa_squared = kappa_squared_over_g_squared(mass_over_e)
     threshold_squared = 1.0 + 2.0 * np.pi * kappa_squared
-    threshold = float(np.sqrt(threshold_squared))
     weak_inverse_length = (
         WEAK_DECAY_CONSTANT * 2.0 * np.pi * kappa_squared
     )
@@ -136,23 +135,22 @@ def solve_ratio(mass_over_e: float) -> SpectralResult:
     internal_squared = float((4.0 * fine_values[0] - coarse_values[0]) / 3.0)
     if not 0.0 < internal_squared < threshold_squared:
         raise RuntimeError(f"No converged sub-threshold mode for m/e={mass_over_e}")
-    internal_frequency = float(np.sqrt(internal_squared))
-    binding_energy = float(threshold - internal_frequency)
+    squared_gap = float(threshold_squared - internal_squared)
 
-    second_box_frequency = float(np.sqrt(fine_values[1]))
-    if second_box_frequency <= threshold:
+    second_box_squared = float(fine_values[1])
+    if second_box_squared <= threshold_squared:
         raise RuntimeError(
             f"Second finite-box eigenvalue fell below threshold for m/e={mass_over_e}"
         )
 
     return SpectralResult(
         ratio=mass_over_e,
-        threshold=threshold,
-        internal_frequency=internal_frequency,
-        binding_energy=binding_energy,
+        threshold_squared=threshold_squared,
+        internal_squared=internal_squared,
+        squared_gap=squared_gap,
         coarse_internal_squared=float(coarse_values[0]),
         fine_internal_squared=float(fine_values[0]),
-        second_box_frequency=second_box_frequency,
+        second_box_squared=second_box_squared,
         box_half_length=box_half_length,
         coarse_spacing=coarse_spacing,
         fine_spacing=fine_spacing,
@@ -161,12 +159,12 @@ def solve_ratio(mass_over_e: float) -> SpectralResult:
 
 def infer_asymptotics(results: list[SpectralResult]) -> tuple[dict[str, object], dict[str, object]]:
     ratios = np.asarray([result.ratio for result in results])
-    bindings = np.asarray([result.binding_energy for result in results])
+    squared_gaps = np.asarray([result.squared_gap for result in results])
 
     # Infer the leading power from the smallest five points before fitting
     # coefficients. Rounding is justified by the requested integer-power expansion.
     log_slope = float(
-        np.polyfit(np.log(ratios[:5]), np.log(bindings[:5]), 1)[0]
+        np.polyfit(np.log(ratios[:5]), np.log(squared_gaps[:5]), 1)[0]
     )
     leading_power = int(round(log_slope))
     if leading_power < 1:
@@ -177,7 +175,7 @@ def infer_asymptotics(results: list[SpectralResult]) -> tuple[dict[str, object],
     selected_max_ratio = None
     for window_size in (4, 5, 6, 7):
         x = ratios[:window_size]
-        scaled = bindings[:window_size] / x**leading_power
+        scaled = squared_gaps[:window_size] / x**leading_power
         # The intercept and linear term are c_p and c_{p+1}. Higher terms
         # stabilize the extrapolation without fixing their values.
         polynomial = np.polyfit(x, scaled, 3)
@@ -194,7 +192,7 @@ def infer_asymptotics(results: list[SpectralResult]) -> tuple[dict[str, object],
 
     assert selected_coefficients is not None and selected_max_ratio is not None
     asymptotics = {
-        "energy_unit": "mu=e/sqrt(pi)",
+        "squared_frequency_unit": "mu^2=e^2/pi",
         "internal_level_exists": True,
         "leading_power": leading_power,
         "leading_coefficient": selected_coefficients[0],
@@ -244,21 +242,22 @@ def main() -> None:
         [
             (
                 result.ratio,
-                result.threshold,
-                result.internal_frequency,
-                result.binding_energy,
-                result.binding_energy / result.ratio**2,
+                result.threshold_squared,
+                result.internal_squared,
+                result.squared_gap,
+                result.squared_gap / result.ratio**2,
             )
             for result in results
         ]
     )
     np.savetxt(
-        ROOT / "binding_curve.csv",
+        ROOT / "spectral_gap_curve.csv",
         curve,
         delimiter=",",
         header=(
-            "mass_over_e,continuum_threshold_mu,internal_frequency_mu,"
-            "binding_energy_mu,binding_over_r_squared"
+            "mass_over_e,continuum_threshold_squared_mu2,"
+            "internal_frequency_squared_mu2,squared_frequency_gap_mu2,"
+            "gap_over_r_squared"
         ),
         comments="",
         fmt="%.14g",
@@ -275,10 +274,10 @@ def main() -> None:
             "fine_spacing": result.fine_spacing,
             "coarse_internal_squared": result.coarse_internal_squared,
             "fine_internal_squared": result.fine_internal_squared,
-            "second_box_frequency": result.second_box_frequency,
-            "continuum_threshold": result.threshold,
+            "second_box_squared": result.second_box_squared,
+            "continuum_threshold_squared": result.threshold_squared,
             "second_threshold_relative_error": (
-                result.second_box_frequency / result.threshold - 1.0
+                result.second_box_squared / result.threshold_squared - 1.0
             ),
         }
         for result in results

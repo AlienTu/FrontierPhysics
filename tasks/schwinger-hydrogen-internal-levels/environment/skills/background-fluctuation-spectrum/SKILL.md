@@ -21,8 +21,8 @@ model.
 6. Increase the box until the first mode is stable and the second eigenvalue
    approaches the analytic asymptotic threshold.
 7. Refine the grid and extrapolate the lowest eigenvalue in the grid spacing.
-8. Fit the binding curve only after checking local log slopes and varying the
-   largest mass ratio retained in the fit.
+8. Fit the squared-frequency gap directly, before taking square roots. Check
+   local log slopes and vary the largest mass ratio retained in the fit.
 
 Do not treat the first discretized continuum state as an internal excitation.
 For a very shallow mode, choose the box from the mode's decay length rather

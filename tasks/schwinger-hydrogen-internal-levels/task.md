@@ -1,8 +1,8 @@
 ---
 schema_version: '1.3'
 metadata:
-  author_name: AlienTu
-  author_email: 149789160+AlienTu@users.noreply.github.com
+  author_name: Haochen Tu
+  author_email: at5526@princeton.edu
   difficulty: hard
   category: natural-science
   subcategory: quantum-field-theory
@@ -61,7 +61,7 @@ j^1_{\mathrm{ext}}(x)=0.
 \]
 
 The external source is an infinitely heavy positive unit charge fixed at the
-origin. Work at \(\theta=0\), on the infinite line, in the neutral sector in
+origin. Work at zero background electrical field, on the infinite line, in the neutral sector in
 which the external charge is completely screened by the dynamical field. This
 is the \(1+1\)-dimensional analogue of a hydrogen atom.
 
@@ -81,7 +81,8 @@ as the energy unit. For each mass ratio \(r=m/e\), define:
 - \(\omega_{\mathrm{th}}(r)\), the lowest neutral scattering threshold;
 - \(\omega_{\mathrm{int}}(r)\), the lowest positive-frequency normalizable
   excitation localized near the external charge;
-- \(E_B(r)=\omega_{\mathrm{th}}(r)-\omega_{\mathrm{int}}(r)\).
+- \(\Delta_B(r)=\omega_{\mathrm{th}}^2(r)-\omega_{\mathrm{int}}^2(r)\),
+  the squared-frequency gap below the scattering threshold.
 
 A finite-box continuum eigenvalue is not an internal level. Count a mode only
 if it remains below the infinite-volume threshold and localized near the
@@ -99,28 +100,28 @@ r\in\{
 Use the computed weak-mass curve to determine the first two nonzero terms
 
 \[
-\frac{E_B(r)}{\mu}
-=c_p r^p+c_{p+1}r^{p+1}+o(r^{p+1}),
+\frac{\Delta_B(r)}{\mu^2}
+=d_p r^p+d_{p+1}r^{p+1}+o(r^{p+1}),
 \]
 
 without assuming \(p\) in advance. Report the integer leading power \(p\), its
-coefficient \(c_p\), and the first correction coefficient \(c_{p+1}\).
+coefficient \(d_p\), and the first correction coefficient \(d_{p+1}\).
 
-Write `/root/binding_curve.csv` with exactly this header:
+Write `/root/spectral_gap_curve.csv` with exactly this header:
 
 ```text
-mass_over_e,continuum_threshold_mu,internal_frequency_mu,binding_energy_mu,binding_over_r_squared
+mass_over_e,continuum_threshold_squared_mu2,internal_frequency_squared_mu2,squared_frequency_gap_mu2,gap_over_r_squared
 ```
 
 Include exactly the nine requested mass ratios in increasing order. All
-frequencies and energies are in units of \(\mu\). Retain enough digits to
-resolve the smallest binding energy.
+squared frequencies are in units of \(\mu^2\). Retain enough digits to resolve
+the smallest squared-frequency gap.
 
 Write `/root/asymptotics.json` with exactly this structure:
 
 ```json
 {
-  "energy_unit": "mu=e/sqrt(pi)",
+  "squared_frequency_unit": "mu^2=e^2/pi",
   "internal_level_exists": true,
   "leading_power": 0,
   "leading_coefficient": 0.0,

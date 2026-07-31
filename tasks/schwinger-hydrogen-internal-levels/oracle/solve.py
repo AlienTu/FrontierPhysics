@@ -265,6 +265,11 @@ def main() -> None:
     (ROOT / "asymptotics.json").write_text(
         json.dumps(asymptotics, indent=2) + "\n"
     )
+    result = {
+        "d2": round(float(asymptotics["leading_coefficient"]), 1),
+        "d3": round(float(asymptotics["next_coefficient"]), 1),
+    }
+    (ROOT / "result.json").write_text(json.dumps(result, indent=2) + "\n")
 
     spectral_diagnostics = [
         {
@@ -353,7 +358,7 @@ def main() -> None:
         ]
     )
     (ROOT / "report.md").write_text("\n".join(report_lines))
-    print(json.dumps(asymptotics, indent=2))
+    print(json.dumps(result, indent=2))
 
 
 if __name__ == "__main__":

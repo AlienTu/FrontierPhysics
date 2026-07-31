@@ -14,7 +14,6 @@ metadata:
   modality:
   - scientific-data
   - json
-  - csv
   interface:
   - terminal
   - python
@@ -88,55 +87,23 @@ A finite-box continuum eigenvalue is not an internal level. Count a mode only
 if it remains below the infinite-volume threshold and localized near the
 source as the box and numerical resolution are increased.
 
-Evaluate
-
-\[
-r\in\{
-0.00025,\ 0.000375,\ 0.0005,\ 0.00075,\ 0.001,\ 0.0015,\
-0.002,\ 0.003,\ 0.004
-\}.
-\]
-
-Use the computed weak-mass curve to determine the first two nonzero terms
+Determine the first two terms of the weak-mass expansion
 
 \[
 \frac{\Delta_B(r)}{\mu^2}
-=d_p r^p+d_{p+1}r^{p+1}+o(r^{p+1}),
+=d_2 r^2+d_3r^3+o(r^3).
 \]
 
-without assuming \(p\) in advance. Report the integer leading power \(p\), its
-coefficient \(d_p\), and the first correction coefficient \(d_{p+1}\).
-
-Write `/root/spectral_gap_curve.csv` with exactly this header:
-
-```text
-mass_over_e,continuum_threshold_squared_mu2,internal_frequency_squared_mu2,squared_frequency_gap_mu2,gap_over_r_squared
-```
-
-Include exactly the nine requested mass ratios in increasing order. All
-squared frequencies are in units of \(\mu^2\). Retain enough digits to resolve
-the smallest squared-frequency gap.
-
-Write `/root/asymptotics.json` with exactly this structure:
+You may determine the coefficients analytically, numerically, or by a
+combination of the two. Write `/root/result.json` with exactly this structure:
 
 ```json
 {
-  "squared_frequency_unit": "mu^2=e^2/pi",
-  "internal_level_exists": true,
-  "leading_power": 0,
-  "leading_coefficient": 0.0,
-  "next_power": 0,
-  "next_coefficient": 0.0,
-  "fit_mass_ratio_max": 0.0
+  "d2": 0.0,
+  "d3": 0.0
 }
 ```
 
-Set `internal_level_exists` from the infinite-volume result, not from the
-presence of a finite-box eigenvalue. Set `fit_mass_ratio_max` to the largest
-mass ratio included in the asymptotic coefficient fit.
-
-Finally, write `/root/report.md`. State the physical criterion used to
-distinguish the localized mode from the continuum, document at least two box
-sizes and two spatial resolutions, and show how the inferred asymptotic
-coefficients change under at least two fit windows. The scientific result,
-rather than the choice of method or software, will be graded.
+Report both coefficients to one decimal place. The scientific result, rather
+than the choice of field variables, derivation, numerical method, or software,
+will be graded.

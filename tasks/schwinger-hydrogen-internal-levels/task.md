@@ -60,9 +60,9 @@ j^1_{\mathrm{ext}}(x)=0.
 \]
 
 The external source is an infinitely heavy positive unit charge fixed at the
-origin. Work at zero background electrical field, on the infinite line, in the neutral sector in
-which the external charge is completely screened by the dynamical field. This
-is the \(1+1\)-dimensional analogue of a hydrogen atom.
+origin. Work at zero background electrical field, on the infinite line, in
+the neutral sector in which the external charge is completely screened by the
+dynamical field. This is the \(1+1\)-dimensional analogue of a hydrogen atom.
 
 Determine, at leading semiclassical order, whether the screened atom has a
 localized neutral internal excitation when \(m/e\ll1\). You may use any
@@ -87,11 +87,11 @@ A finite-box continuum eigenvalue is not an internal level. Count a mode only
 if it remains below the infinite-volume threshold and localized near the
 source as the box and numerical resolution are increased.
 
-Determine the first two terms of the weak-mass expansion
+Determine the weak-mass expansion through cubic order
 
 \[
 \frac{\Delta_B(r)}{\mu^2}
-=d_2 r^2+d_3r^3+o(r^3).
+=d_1r+d_2r^2+d_3r^3+o(r^3).
 \]
 
 You may determine the coefficients analytically, numerically, or by a
@@ -99,11 +99,14 @@ combination of the two. Write `/root/result.json` with exactly this structure:
 
 ```json
 {
+  "bound_state_exists": true,
+  "d1": 0.0,
   "d2": 0.0,
   "d3": 0.0
 }
 ```
 
-Report both coefficients to one decimal place. The scientific result, rather
-than the choice of field variables, derivation, numerical method, or software,
-will be graded.
+Report all three coefficients to one decimal place. Set `bound_state_exists`
+from the infinite-volume result, not from the presence of a finite-box
+eigenvalue. The scientific result, rather than the choice of field variables,
+derivation, numerical method, or software, will be graded.

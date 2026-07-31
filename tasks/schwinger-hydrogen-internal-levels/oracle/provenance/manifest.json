@@ -1,0 +1,24 @@
+{
+  "schema_version": "frontierphysics-provenance-v1",
+  "task_id": "schwinger-hydrogen-internal-levels",
+  "visibility": "reviewer_only",
+  "one_line": "Weak-mass internal excitation of a completely screened static unit charge in the one-flavour massive Schwinger model.",
+  "source_model": {
+    "field_theory": "One-flavour massive QED in 1+1 dimensions with a fixed external unit charge, mapped to the standard Coleman-normal-ordered scalar Hamiltonian.",
+    "calculation": "Task-authored background-field boundary-value solve, linear fluctuation spectrum, large-volume localization check, and weak-coupling coefficient extraction."
+  },
+  "primary_references": [
+    {
+      "citation": "S. Coleman, More About the Massive Schwinger Model, Annals of Physics 101, 239-267 (1976).",
+      "doi": "10.1016/0003-4916(76)90280-3",
+      "use": "Bosonized massive Schwinger-model normalization and semiclassical scalar formulation."
+    },
+    {
+      "citation": "B. Simon, The bound state of weakly coupled Schrodinger operators in one and two dimensions, Annals of Physics 97, 279-288 (1976).",
+      "doi": "10.1016/0003-4916(76)90038-5",
+      "use": "Weak one-dimensional bound-state expansion used to validate the small-mass coefficients."
+    }
+  ],
+  "data": "No external numerical dataset is bundled; all curves and coefficients are generated from the stated field theory.",
+  "license": "Task-authored prompt, code, and derived numerical outputs are contributed under the repository Apache-2.0 license."
+}

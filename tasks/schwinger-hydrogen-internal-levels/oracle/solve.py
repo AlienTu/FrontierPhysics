@@ -37,8 +37,8 @@ class SpectralResult:
     fine_spacing: float
 
 
-def kappa_squared_over_g_squared(mass_over_e: float) -> float:
-    # g=e/sqrt(pi), kappa^2=e^gamma*m*g/pi.
+def kappa_over_g_squared(mass_over_e: float) -> float:
+    # g=e/sqrt(pi), kappa=e^gamma*m*g/pi.
     return float(np.exp(EULER_GAMMA) * mass_over_e / SQRT_PI)
 
 
@@ -96,8 +96,8 @@ def perturbative_coefficients() -> tuple[float, float]:
 
 
 def solve_positive_half_background(mass_over_e: float):
-    kappa_squared = kappa_squared_over_g_squared(mass_over_e)
-    threshold_squared = 1.0 + 2.0 * np.pi * kappa_squared
+    kappa_ratio = kappa_over_g_squared(mass_over_e)
+    threshold_squared = 1.0 + 2.0 * np.pi * kappa_ratio
     x = np.linspace(0.0, 30.0, 3001)
     u_guess = 0.5 * SQRT_PI * np.exp(-np.sqrt(threshold_squared) * x)
     y_guess = np.vstack((u_guess, np.gradient(u_guess, x)))
@@ -109,7 +109,7 @@ def solve_positive_half_background(mass_over_e: float):
                 y[1],
                 y[0]
                 + SQRT_PI
-                * kappa_squared
+                * kappa_ratio
                 * np.sin(2.0 * SQRT_PI * y[0]),
             )
         )
@@ -132,7 +132,7 @@ def solve_positive_half_background(mass_over_e: float):
 
 def lowest_two_squared(
     solution,
-    kappa_squared: float,
+    kappa_ratio: float,
     box_half_length: float,
     target_spacing: float,
 ) -> tuple[np.ndarray, float]:
@@ -152,7 +152,7 @@ def lowest_two_squared(
         1.0
         + 2.0
         * np.pi
-        * kappa_squared
+        * kappa_ratio
         * np.cos(2.0 * SQRT_PI * phi[1:-1])
     )
     diagonal = 2.0 / spacing**2 + potential
@@ -169,19 +169,19 @@ def lowest_two_squared(
 
 
 def solve_ratio(mass_over_e: float) -> SpectralResult:
-    kappa_squared = kappa_squared_over_g_squared(mass_over_e)
-    threshold_squared = 1.0 + 2.0 * np.pi * kappa_squared
+    kappa_ratio = kappa_over_g_squared(mass_over_e)
+    threshold_squared = 1.0 + 2.0 * np.pi * kappa_ratio
     weak_inverse_length = (
-        WEAK_DECAY_CONSTANT * 2.0 * np.pi * kappa_squared
+        WEAK_DECAY_CONSTANT * 2.0 * np.pi * kappa_ratio
     )
     box_half_length = float(max(160.0, 16.0 / weak_inverse_length))
     solution = solve_positive_half_background(mass_over_e)
 
     coarse_values, coarse_spacing = lowest_two_squared(
-        solution, kappa_squared, box_half_length, 0.04
+        solution, kappa_ratio, box_half_length, 0.04
     )
     fine_values, fine_spacing = lowest_two_squared(
-        solution, kappa_squared, box_half_length, 0.02
+        solution, kappa_ratio, box_half_length, 0.02
     )
 
     # Second-order finite differences: extrapolate the bound eigenvalue in h^2.
@@ -219,7 +219,7 @@ def infer_asymptotics(results: list[SpectralResult]) -> tuple[dict[str, object],
     log_slope = float(
         np.polyfit(np.log(ratios[:5]), np.log(squared_gaps[:5]), 1)[0]
     )
-    leading_power = int(round(log_slope))
+    leading_power = round(log_slope)
     if leading_power < 1:
         raise RuntimeError("Failed to infer a positive leading power")
 
@@ -266,7 +266,7 @@ def main() -> None:
     asymptotics, fit_diagnostics = infer_asymptotics(results)
 
     representative = results[4]  # m/e=0.001
-    representative_kappa_squared = kappa_squared_over_g_squared(
+    representative_kappa_ratio = kappa_over_g_squared(
         representative.ratio
     )
     representative_background = solve_positive_half_background(
@@ -277,7 +277,7 @@ def main() -> None:
         checked_half_length = box_fraction * representative.box_half_length
         checked_values, checked_spacing = lowest_two_squared(
             representative_background,
-            representative_kappa_squared,
+            representative_kappa_ratio,
             checked_half_length,
             0.025,
         )
@@ -319,7 +319,16 @@ def main() -> None:
         json.dumps(asymptotics, indent=2) + "\n"
     )
     perturbative_d2, perturbative_d3 = perturbative_coefficients()
+    bound_state_exists = all(
+        item.internal_squared < item.threshold_squared
+        and item.second_box_squared > item.threshold_squared
+        for item in results
+    )
+    if asymptotics["leading_power"] != 2:
+        raise RuntimeError("The numerical curve does not support a vanishing d1")
     result = {
+        "bound_state_exists": bound_state_exists,
+        "d1": 0.0,
         "d2": round(perturbative_d2, 1),
         "d3": round(perturbative_d3, 1),
     }
@@ -344,8 +353,8 @@ def main() -> None:
     diagnostics = {
         "conventions": {
             "g": "e/sqrt(pi)",
-            "kappa_squared": "exp(gamma)*m*g/pi",
-            "threshold_squared": "g^2+2*pi*kappa^2",
+            "kappa": "exp(gamma)*m*g/pi",
+            "threshold_squared": "g^2+2*pi*kappa",
         },
         "spectra": spectral_diagnostics,
         "box_size_check": box_size_check,

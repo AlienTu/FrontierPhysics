@@ -13,5 +13,5 @@ RUN pip install --no-cache-dir \
     pytest==8.3.3 \
     pytest-json-ctrf==0.3.5
 
-WORKDIR /root
-RUN chmod 777 /root
+WORKDIR /app
+RUN mkdir -p /app && chmod 777 /app /root

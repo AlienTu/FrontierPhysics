@@ -9,7 +9,7 @@ g=\frac{e}{\sqrt{\pi}},
 define
 
 \[
-\kappa^2=\frac{e^\gamma}{\pi}mg.
+\kappa=\frac{e^\gamma}{\pi}mg.
 \]
 
 For a positive external unit charge at the origin, an equivalent scalar
@@ -19,7 +19,7 @@ Hamiltonian is
 \mathcal H =
 \frac12\Pi^2+\frac12(\partial_x\phi)^2
 +\frac12g^2\left(\phi+\sqrt{\pi}\Theta(x)\right)^2
-+\frac{\kappa^2}{2}\left[1-\cos(2\sqrt{\pi}\phi)\right].
++\frac{\kappa}{2}\left[1-\cos(2\sqrt{\pi}\phi)\right].
 \]
 
 The screened static sector obeys
@@ -39,7 +39,7 @@ The static equation away from the source is
 \[
 -\phi''+
 g^2\left(\phi+\sqrt{\pi}\Theta(x)\right)
-+\sqrt{\pi}\kappa^2\sin(2\sqrt{\pi}\phi)=0.
++\sqrt{\pi}\kappa\sin(2\sqrt{\pi}\phi)=0.
 \]
 
 The canonically normalized fluctuation operator is
@@ -47,13 +47,13 @@ The canonically normalized fluctuation operator is
 \[
 \mathcal K=
 -\frac{d^2}{dx^2}
-+g^2+2\pi\kappa^2\cos(2\sqrt{\pi}\phi_{\rm bg}(x)).
++g^2+2\pi\kappa\cos(2\sqrt{\pi}\phi_{\rm bg}(x)).
 \]
 
 Its infinite-volume continuum threshold is
 
 \[
-\omega_{\rm th}=\sqrt{g^2+2\pi\kappa^2}.
+\omega_{\rm th}=\sqrt{g^2+2\pi\kappa}.
 \]
 
 The most stable weak-binding observable is the direct eigenvalue difference
@@ -73,7 +73,7 @@ energy can be recovered, if desired, from
 In units \(g=1\), the input ratio \(r=m/e\) implies
 
 \[
-\frac{\kappa^2}{g^2}=\frac{e^\gamma}{\sqrt{\pi}}r.
+\frac{\kappa}{g^2}=\frac{e^\gamma}{\sqrt{\pi}}r.
 \]
 
 For a second-order finite-difference operator, compare at least two grid

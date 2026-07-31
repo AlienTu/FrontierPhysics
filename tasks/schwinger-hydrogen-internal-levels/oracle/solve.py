@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
-from scipy.integrate import solve_bvp
+from scipy.integrate import solve_bvp, solve_ivp
 from scipy.linalg import eigh_tridiagonal
 from scipy.special import sici
 
@@ -40,6 +40,59 @@ class SpectralResult:
 def kappa_squared_over_g_squared(mass_over_e: float) -> float:
     # g=e/sqrt(pi), kappa^2=e^gamma*m*g/pi.
     return float(np.exp(EULER_GAMMA) * mass_over_e / SQRT_PI)
+
+
+def perturbative_coefficients() -> tuple[float, float]:
+    """Numerically evaluate the weak-binding coefficients through O(r^3)."""
+
+    # On the positive half-line the zeroth-order dimensionless background is
+    # y_0=pi*exp(-x).  The six accumulated integrals below evaluate both the
+    # first background correction and the second Born term without a large-box
+    # subtraction of nearly equal eigenvalues.
+    def integral_system(x: float, values: np.ndarray) -> np.ndarray:
+        f0 = np.cos(np.pi * np.exp(-x)) - 1.0
+        source = np.sin(np.pi * np.exp(-x))
+        cumulative_f0, cumulative_x_f0, _, cumulative_source, _, _ = values
+        return np.asarray(
+            (
+                f0,
+                x * f0,
+                f0 * (x * cumulative_f0 - cumulative_x_f0),
+                source * np.exp(x),
+                source * np.exp(-x) * cumulative_source,
+                source * np.exp(-x),
+            )
+        )
+
+    integrals = solve_ivp(
+        integral_system,
+        (0.0, 50.0),
+        np.zeros(6),
+        method="DOP853",
+        rtol=2.0e-13,
+        atol=2.0e-15,
+        max_step=0.01,
+    )
+    if not integrals.success:
+        raise RuntimeError("Perturbative coefficient integration failed")
+    f0_integral, x_f0_integral, same_sign_piece, _, green_piece, source_tail = (
+        integrals.y[:, -1]
+    )
+    double_f0 = (
+        4.0 * same_sign_piece + 4.0 * f0_integral * x_f0_integral
+    )
+    background_piece = green_piece - 0.5 * source_tail**2
+    second_order_momentum = -background_piece - 0.25 * double_f0
+
+    mass_ratio_scale = 2.0 * SQRT_PI * np.exp(EULER_GAMMA)
+    d2 = WEAK_DECAY_CONSTANT**2 * mass_ratio_scale**2
+    d3 = (
+        2.0
+        * WEAK_DECAY_CONSTANT
+        * second_order_momentum
+        * mass_ratio_scale**3
+    )
+    return float(d2), float(d3)
 
 
 def solve_positive_half_background(mass_over_e: float):
@@ -265,9 +318,10 @@ def main() -> None:
     (ROOT / "asymptotics.json").write_text(
         json.dumps(asymptotics, indent=2) + "\n"
     )
+    perturbative_d2, perturbative_d3 = perturbative_coefficients()
     result = {
-        "d2": round(float(asymptotics["leading_coefficient"]), 1),
-        "d3": round(float(asymptotics["next_coefficient"]), 1),
+        "d2": round(perturbative_d2, 1),
+        "d3": round(perturbative_d3, 1),
     }
     (ROOT / "result.json").write_text(json.dumps(result, indent=2) + "\n")
 
@@ -295,6 +349,10 @@ def main() -> None:
         },
         "spectra": spectral_diagnostics,
         "box_size_check": box_size_check,
+        "perturbative_coefficients": {
+            "d2": perturbative_d2,
+            "d3": perturbative_d3,
+        },
         **fit_diagnostics,
     }
     (ROOT / "oracle_diagnostics.json").write_text(

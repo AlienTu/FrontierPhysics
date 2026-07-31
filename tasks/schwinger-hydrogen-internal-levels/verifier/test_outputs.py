@@ -34,4 +34,4 @@ def test_d2() -> None:
 
 
 def test_d3() -> None:
-    assert math.isclose(float(load_result()["d3"]), -2510.3, abs_tol=0.11)
+    assert math.isclose(float(load_result()["d3"]), -2510.4, abs_tol=0.11)

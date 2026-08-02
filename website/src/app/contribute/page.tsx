@@ -3,6 +3,7 @@ import {
   credit,
   scoringDeadline,
   site,
+  stages,
   tasksForAuthorship,
 } from "@/lib/site";
 import {
@@ -82,7 +83,7 @@ const STEPS = [
   {
     step: "02",
     title: "Create",
-    body: "Write the task package: prompt and metadata, Docker environment, mentor skills, oracle, verifier.",
+    body: "Write the task package: prompt and metadata, Docker environment, mentor skills, planning rubric, oracle, verifier.",
   },
   {
     step: "03",
@@ -125,6 +126,7 @@ const SUBMISSION = [
 const YOUR_JOB = [
   "The prompt body — written by hand, in imperative prose",
   "The oracle solution, deriving the answer by computation",
+  "The planning rubric — what a sound research plan must get right",
   "The scientific judgement about what counts as correct",
   "The claim that this reflects real research practice",
 ];
@@ -163,8 +165,13 @@ export default function Contribute() {
               <strong className="font-semibold text-foreground">
                 {credit.review}
               </strong>
-              . {tasksForAuthorship} authored tasks gets you there, as does any
-              mix that adds up. Points land on merge.
+              , and referring a contributor earns{" "}
+              <strong className="font-semibold text-foreground">
+                {credit.referral}
+              </strong>{" "}
+              once their first task merges. {tasksForAuthorship} authored tasks
+              gets you there, as does any mix that adds up. Points land on
+              merge.
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Reviewing opens up once you have your first good task merged — ask
@@ -209,7 +216,7 @@ export default function Contribute() {
         </div>
       </header>
 
-      <section className="space-y-6 mb-20">
+      <section id="who" className="scroll-mt-28 space-y-6 mb-20">
         <h2 className="text-2xl font-bold tracking-tight">
           Who should contribute
         </h2>
@@ -226,7 +233,7 @@ export default function Contribute() {
         </ul>
       </section>
 
-      <section className="space-y-6 mb-20">
+      <section id="ideal-task" className="scroll-mt-28 space-y-6 mb-20">
         <h2 className="text-2xl font-bold tracking-tight">
           What makes an ideal task
         </h2>
@@ -265,7 +272,36 @@ export default function Contribute() {
         </p>
       </section>
 
-      <section className="space-y-6 mb-20">
+      <section id="two-stages" className="scroll-mt-28 space-y-6 mb-20">
+        <div className="space-y-3">
+          <h2 className="text-2xl font-bold tracking-tight">
+            Two stages, two graders
+          </h2>
+          <p className="text-muted-foreground leading-relaxed">
+            Every task is graded in two stages, and you write the grader for
+            each.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {stages.map((stage) => (
+            <div
+              key={stage.step}
+              className="rounded-2xl border border-border bg-card p-6 space-y-2"
+            >
+              <span className="font-mono text-sm text-muted-foreground">
+                {stage.step}
+              </span>
+              <h3 className="font-semibold tracking-tight">{stage.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {stage.body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="steps" className="scroll-mt-28 space-y-6 mb-20">
         <h2 className="text-2xl font-bold tracking-tight">The four steps</h2>
         <ol className="space-y-6">
           {STEPS.map((item) => (
@@ -284,7 +320,7 @@ export default function Contribute() {
         </ol>
       </section>
 
-      <section className="space-y-6 mb-20">
+      <section id="yours" className="scroll-mt-28 space-y-6 mb-20">
         <div className="space-y-3">
           <h2 className="text-2xl font-bold tracking-tight">
             What you must write yourself
@@ -335,7 +371,7 @@ export default function Contribute() {
         </div>
       </section>
 
-      <section className="space-y-6 mb-20">
+      <section id="submission" className="scroll-mt-28 space-y-6 mb-20">
         <div className="space-y-3">
           <h2 className="text-2xl font-bold tracking-tight">
             The final submission

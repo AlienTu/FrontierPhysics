@@ -43,6 +43,7 @@ reproducing your results would take them.
 - [ ] `bench tasks check tasks/<task-id>` passes
 - [ ] Oracle reaches reward `1.0`
 - [ ] Verifier checks outcomes, not implementation or skill usage
+- [ ] Planning rubric grades the deep-research stage
 - [ ] Mentor skills are included and may be task-specific
 - [ ] Mentor skills contain no hardcoded final answers or verifier internals
 - [ ] Dockerfile does not bake skills into the agent image
@@ -79,11 +80,13 @@ artifacts needed for human review.
 
 ## Credit
 
-Merging awards 4 points to the task author and 1 point to each reviewer who
-signed off; 12 points earns co-authorship on the FrontierPhysics paper and
-dataset. See the [authorship policy](https://github.com/benchflow-ai/FrontierPhysics/blob/main/CONTRIBUTING.md#authorship-policy).
+Merging awards 6 points to the task author and 1 point to each reviewer who
+signed off; if this is your first merged task and someone referred you, name
+them and they earn 2. 12 points earns co-authorship on the FrontierPhysics
+paper and dataset. See the [authorship policy](https://github.com/benchflow-ai/FrontierPhysics/blob/main/CONTRIBUTING.md#authorship-policy).
 
 | Role | GitHub handle(s) |
 |---|---|
 | Author | |
 | Reviewers | |
+| Referred by (first merged task only) | |

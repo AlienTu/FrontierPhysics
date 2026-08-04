@@ -16,23 +16,28 @@ on the FrontierPhysics paper and dataset.
 
 | Contribution | Points |
 |---|---:|
-| A task you authored is merged | 4 |
+| A task you authored is merged | 6 |
+| A contributor you referred gets their first task merged | 2 |
 | A task you reviewed is merged | 1 |
 
-Points accumulate across both kinds of work, so three merged tasks reaches 12,
-and so does any mix that adds up — two merged tasks plus four reviews, for
-example.
+Points accumulate across all three kinds of work, so two merged tasks reaches
+12, and so does any mix that adds up — one merged task, a referral, and four
+reviews, for example.
+
+A referral means bringing someone new to the project. It scores once per
+person, when their first authored task merges — have them name you in that
+PR's description so the maintainers know who to credit.
 
 Reviewing opens up once you have your first good task merged: authoring one is
 how you demonstrate you can judge someone else's. Ask a maintainer to be added
 as a reviewer.
 
-**Only tasks merged by 20 August 2026 count toward points.** Merged, not
+**Only tasks merged by 31 August 2026 count toward points.** Merged, not
 opened — review and revision take days of back-and-forth, so a PR opened close
 to the deadline is unlikely to land in time.
 
-Points are awarded on merge, not on submission: a review earns its point only
-once the task it reviewed is merged. Quality beats quantity — one excellent task
+Points are awarded on merge, not on submission: a review or a referral earns
+its points only once the task behind it is merged. Quality beats quantity — one excellent task
 is worth more than many mediocre ones, and a submission that does not clear the
 bar in [What makes an ideal task](#what-makes-an-ideal-task) earns nothing.
 
@@ -52,10 +57,24 @@ Three things:
 
 A task that misses any one of these will not merge.
 
+# Two stages, two graders
+Every task is evaluated in two stages, and you write the grader for each:
+
+1. **Deep research.** The agent studies the problem and commits to a research
+   plan. A planning rubric you author grades that plan — the physics that must
+   be modelled, the approximations that are defensible, the checks that catch
+   a wrong turn early.
+2. **Execution.** The agent carries the plan out. The verifier checks that the
+   final results are accurate.
+
+The rubric ships in the task package alongside the verifier; agree on its
+exact placement with a maintainer in your draft PR.
+
 # How to contribute
 1. **Ideate**: Pick a project that meets all three. Bring it to group chat or
    confirm with a maintainer before you build.
-2. **Create**: Implement the task package. See `Task Package` below.
+2. **Create**: Implement the task package, including the planning rubric. See
+   `Task Package` below.
 3. **Test**: Run the oracle, then run a state-of-the-art agent with and
    without skills, over multiple trials.
 4. **Submit**: Fork this repository and open a draft PR against `main` here
@@ -144,7 +163,8 @@ Reviewers look for:
 - **Authenticity**: real scenario, real data where possible, human-authored task
   prompt and oracle.
 - **Skill quality**: accurate, reusable, useful beyond this task.
-- **Verification**: deterministic, outcome-based, anti-cheat aware.
+- **Verification**: deterministic, outcome-based, anti-cheat aware, covering
+  both stages — the planning rubric and the execution verifier.
 - **Instructions**: concise, fair, no skill hints.
 - **Environment**: reproducible Docker image, pinned deps, no leaked skills.
 - **Complexity**: clears every minimum in

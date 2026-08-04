@@ -1,6 +1,6 @@
 import { HeroBackground } from "@/components/HeroBackground";
 import { Button } from "@/components/ui/button";
-import { credit, site } from "@/lib/site";
+import { credit, site, stages } from "@/lib/site";
 import { getTasks } from "@/lib/tasks";
 import { ArrowRight, ArrowUpRight, Award } from "lucide-react";
 import Link from "next/link";
@@ -72,19 +72,26 @@ export default function Home() {
               <strong className="font-semibold text-foreground">
                 {credit.task} points
               </strong>
-              , a review earns{" "}
+              , a referral{" "}
+              <strong className="font-semibold text-foreground">
+                {credit.referral}
+              </strong>
+              , a review{" "}
               <strong className="font-semibold text-foreground">
                 {credit.review}
               </strong>
-              . At{" "}
-              <strong className="font-semibold text-foreground">
-                {credit.authorship}
-              </strong>{" "}
-              you are a{" "}
-              <strong className="font-semibold text-foreground">
-                co-author
-              </strong>
               .
+              <span className="block">
+                At{" "}
+                <strong className="font-semibold text-foreground">
+                  {credit.authorship} points
+                </strong>{" "}
+                you are a{" "}
+                <strong className="font-semibold text-foreground">
+                  co-author
+                </strong>
+                .
+              </span>
             </p>
           </div>
         </section>
@@ -100,10 +107,29 @@ export default function Home() {
                   A native BenchFlow{" "}
                   <code className="font-mono text-sm">task.md</code> package. The
                   prompt describes an outcome and never names any skill. The
-                  oracle must pass with reward 1.0 before any agent runs.
+                  oracle must pass with reward 1.0 before any agent runs, and
+                  every attempt is graded in two stages.
                 </p>
+                <ol className="space-y-4 pt-1">
+                  {stages.map((stage) => (
+                    <li key={stage.step} className="flex gap-4">
+                      <span className="font-mono text-sm text-muted-foreground pt-0.5 shrink-0">
+                        {stage.step}
+                      </span>
+                      <div className="space-y-1">
+                        <h3 className="font-semibold tracking-tight text-sm">
+                          {stage.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {stage.body}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
                 <p className="text-muted-foreground leading-relaxed">
-                  Prompts and oracle logic are human-authored.
+                  Prompts, oracle logic, and the planning rubric are
+                  human-authored.
                 </p>
               </div>
 
